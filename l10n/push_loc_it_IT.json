@@ -1,0 +1,15 @@
+{
+  "test": "Testo tradotto in italiano per il %filename% in %filedirectory% ",
+  "create_file": "'%pathLeaf%' è stato caricato in '%pathDestinationBranch%' da %userActor% ",
+  "create_folder": "La cartella '%pathDestinationLeaf%' è stata creata in '%pathDestinationBranch%' da %userActor%",
+  "update_file": "'%pathLeaf%' in '%pathDestinationBranch%' è stato aggiornato da %userActor%",
+  "delete_file": "'%pathLeaf%' in %pathBranch% è stato rimosso da %userActor%",
+  "move_file": "'%pathLeaf%' è stato spostato da '%pathSourceBranch%' in '%pathDestinationBranch%' da %userActor%",
+  "rename_file": "'%pathSourceLeaf%' in %pathBranch% è stato rinominato in '%pathLeaf%' da %userActor%",
+  "restore_file": "'%pathLeaf%' è stato ripristinato in '%pathDestinationBranch%' da %userActor%",
+  "share_file": "Il file '%pathLeaf%' è stato condiviso da %userActor% in %pathDestinationBranch%",
+  "share_folder": "La cartella '%pathLeaf%' è stato condivisa da %userActor%",
+  "unshare_file": "La condivisione del file '%pathLeaf%' è stata rimossa da %userActor%",
+  "unshare_folder": "La condivisione della cartella '%pathLeaf%' è stata rimossa da %userActor%",
+  "base_title": "Ciao %userTarget%"
+}

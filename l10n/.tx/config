@@ -1,0 +1,9 @@
+[main]
+host = https://www.transifex.com
+lang_map = it_IT: it, en_EN: en, es_ES
+
+[nextcloud.firebasepushnotifications]
+file_filter = <lang>/firebasepushnotifications.po
+source_file = templates/firebasepushnotifications.pot
+source_lang = en
+type = PO

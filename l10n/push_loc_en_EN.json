@@ -1,0 +1,15 @@
+{
+  "test": "Translated test to English for %filename% in %filedirectory% ",
+  "create_file": "'%pathLeaf%' was uploaded in '%pathDestinationBranch%' by %userActor% ",
+  "create_folder": "'%pathDestinationLeaf%' folder was uploaded in '%pathDestinationBranch%' by %userActor%",
+  "update_file": "'%pathLeaf%' in '%pathDestinationBranch%' updated by %userActor%",
+  "delete_file": "'%pathLeaf%' in '%pathBranch%' was deleted by %userActor%",
+  "move_file": "'%pathLeaf%' moved from '%pathSourceBranch%' to '%pathDestinationBranch%' by %userActor%",
+  "rename_file": "'%pathSourceLeaf%' in '%pathBranch%' renamed to '%pathLeaf%' by %userActor%",
+  "restore_file": "'%pathLeaf%' restored to '%pathDestinationBranch%' by %userActor%",
+  "share_file": "'%pathLeaf%' shared by %userActor%",
+  "share_folder": "'%pathLeaf%' folder shared by %userActor%",
+  "unshare_file": "'%pathLeaf%' unshared by %userActor%",
+  "unshare_folder": "'%pathLeaf%' folder unshared by %userActor%",
+  "base_title": "Hello %userTarget%"
+}

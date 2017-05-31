@@ -1,0 +1,15 @@
+{
+  "test": "Testo en la lengua espanola, y si, no he usado la n espanola por %filename% en %filedirectory% ",
+  "create_file": "'%pathLeaf%' cargado en '%pathDestinationBranch%' por %userActor% ",
+  "create_folder": "'%pathDestinationLeaf%' carpeta creada en '%pathDestinationBranch%' por %userActor%",
+  "update_file": "'%pathLeaf%' en '%pathDestinationBranch%' actualizada por %userActor%",
+  "delete_file": "'%pathLeaf%' en '%pathBranch%' borrada por %userActor%",
+  "move_file": "'%pathLeaf%' transladada de '%pathSourceBranch%' en '%pathDestinationBranch%' por %userActor%",
+  "rename_file": "'%pathSourceLeaf%' en '%pathBranch%' renombrado como '%pathLeaf%' por %userActor%",
+  "restore_file": "'%pathLeaf%' restaurado a '%pathDestinationBranch%' por %userActor%",
+  "share_file": "'%pathLeaf%' compartido por %userActor%",
+  "share_folder": "'%pathLeaf%' carpeta compartida por %userActor%",
+  "unshare_file": "Compartida de '%pathLeaf%' borrada por %userActor%",
+  "unshare_folder": "Compartida de carpeta '%pathLeaf%' borrada port %userActor%",
+  "base_title": "Hola %userTarget%"
+}
