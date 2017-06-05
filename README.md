@@ -46,20 +46,20 @@ parameters:
 - locale (currently supports EN_en, IT_it, and ES_es. more to come and per request)
 
 ##### Response:
-*Status* : __200__ (__HTTP_OK__) on success or __400__ (__HTTP_BAD_REQUEST__) on failure
-*Json Repsonse*: containing the following fields
- *result*: success/error
- *extra*: text message with details
- And optionally containing:
- *error* : error message
- *user_auth* : for OC / NC authentication problems
- *token* : for problems with the token field
- *unknown* : other unexpected conditions
+*Status* : __200__ (__HTTP_OK__) on success or __400__ (__HTTP_BAD_REQUEST__) on failure  
+*Json Repsonse*: containing the following fields  
+ *result*: success/error  
+ *extra*: text message with details  
+ And optionally containing:  
+ *error* : error message  
+ *user_auth* : for OC / NC authentication problems  
+ *token* : for problems with the token field  
+ *unknown* : other unexpected conditions  
  
 
 #### Deregistration
 ##### Request:
-URL : your_nextcloud_path/apps/firebasepushnotifications/unregisterToken
+URL : your_nextcloud_path/apps/firebasepushnotifications/unregisterToken  s
 - token (the token to be unregistered)
 ##### Response:
 same fields as the registration request
