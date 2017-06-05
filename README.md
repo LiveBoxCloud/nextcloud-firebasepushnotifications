@@ -37,6 +37,7 @@ devices and applications registering for push messages have to perform the follo
 
 The API currently requires the caller to be authenticated or to supply authentication information to the NextCloud server in the process. 
 #### Registration
+##### Request:
 URL : your_nextcloud_path/apps/firebasepushnotifications/registerToken
 parameters: 
 - token (your application Firebase token)
@@ -44,11 +45,28 @@ parameters:
 - deviceType (whether registering an iOS or Android device , fell free to ask if you need to support for other platforms)
 - locale (currently supports EN_en, IT_it, and ES_es. more to come and per request)
 
+##### Response:
+*Status* : __200__ (__HTTP_OK__) on success or __400__ (__HTTP_BAD_REQUEST__) on failure
+*Json Repsonse*: containing the following fields
+ *result*: success/error
+ *extra*: text message with details
+ And optionally containing:
+ *error* : error message
+ *user_auth* : for OC / NC authentication problems
+ *token* : for problems with the token field
+ *unknown* : other unexpected conditions
+ 
+
 #### Deregistration
+##### Request:
 URL : your_nextcloud_path/apps/firebasepushnotifications/unregisterToken
 - token (the token to be unregistered)
+##### Response:
+same fields as the registration request
+
 
 License
 ----
 GNU AGPL version 3 or any later version
 Copyright (c) 2017, **LiveBox** (_support@liveboxcloud.com_)
+

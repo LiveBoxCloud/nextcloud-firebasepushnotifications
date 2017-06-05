@@ -102,7 +102,7 @@ class TokenController extends Controller {
 	 *     */
 	public function unregisterToken($token) {
 		if (!$token) {
-			return $this->returnError('token', 'Missing token parameter in registration request');
+			return $this->returnError('token', 'Missing token parameter in deregistration request');
 		}
 		$userId = $this->currentUser->getUserIdentifier();
 		if (!$this->currentUser->getUserIdentifier()) {
@@ -139,7 +139,7 @@ class TokenController extends Controller {
 	 * @return DataResponse
 	 */
 	public function returnError($param, $customText = '') {
-		return new DataResponse(['error' => 'missing: ' . $param, 'extra ' => $customText], Http::STATUS_BAD_REQUEST);
+		return new DataResponse(['result' => 'error', 'error' => 'missing: ' . $param, 'extra ' => $customText], Http::STATUS_BAD_REQUEST);
 	}
 
 }
