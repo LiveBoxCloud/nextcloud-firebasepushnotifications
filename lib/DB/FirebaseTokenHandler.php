@@ -26,7 +26,7 @@ use OCA\Firebasepushnotifications\Entities\FirebaseToken;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\Mapper;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
-use OCP\IDb;
+use OCP\IDBConnection;
 use PDO;
 
 class FirebaseTokenHandler extends Mapper
@@ -47,7 +47,7 @@ class FirebaseTokenHandler extends Mapper
 	 *
 	 * @param IDb $db
 	 */
-    public function __construct(IDb $db){
+    public function __construct(IDBConnection $db){
         parent::__construct($db, 'firebase_token', FirebaseToken::class);
     }
 
@@ -147,6 +147,11 @@ class FirebaseTokenHandler extends Mapper
 		$query = 'DELETE FROM `*PREFIX*firebase_token` WHERE user_id != ?  AND token = ? ';
 		return $this->execute($query, [$userId, $token]);
 
+	}
+
+	public function getTokenByUserAndId($userId, $tokenId) {
+		$query = 'SELECT * FROM `*PREFIX*firebase_token` WHERE user_id = ?  AND id = ?  ';
+		return $this->findEntity($query, [$userId, $tokenId]);
 	}
 
     /**This fetches an array of FirebaseToken entities for the given userId

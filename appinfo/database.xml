@@ -58,7 +58,6 @@
 			</field>
 			 <index>
                 <name>user_id_index</name>
-                <unique>true</unique>
                 <field>
                     <name>user_id</name>
                     <sorting>ascending</sorting>

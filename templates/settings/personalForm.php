@@ -14,7 +14,9 @@ use OCA\Firebasepushnotifications\Entities\PushTypesConfiguration;
 try {
 	print_unescaped('<div class="section">');
 	print_unescaped('<h2>Firebase User Settings</h2><span id="firebase_user_settings_activity" class="msg"></span>');
-
+	if(isset($_['web_locale'])){
+		
+	}
 	if (isset($_['userSettings']) && isset($_['userSettings'][FirebaseConfHandler::PUSH_CONFIG_KEY])) {
 		$conf = $_['userSettings'][FirebaseConfHandler::PUSH_CONFIG_KEY];
 		\OC::$server->getLogger()->info('Personal Settings Form: ' . print_r($conf, true) . ' ');
@@ -52,7 +54,7 @@ try {
 		print_unescaped('<h2>Firebase User Tokens</h2><span id="opProgress"></span>');
 		print_unescaped('<form id="tokensForm">');
 		print_unescaped('<table id="tokenTable" class="grid" >');
-		print_unescaped('<thead><tr><th>Id</th><th>DeviceType</th><th>LastUsed</th><th>Locale</th><th>Risorsa</th> <th>Token (Parziale)</th>' . '</tr></thead>');
+		print_unescaped('<thead><tr><th>Id</th><th>DeviceType</th><th>LastUsed</th><th>Locale</th><th>Unique Id</th> <th>Token (part of)</th><th>Actions</th>' . '</tr></thead>');
 		/** @var FirebaseToken $tokenEntry */
 		foreach ($_['tokens'] as $key => $tokenEntry) {
 			print_unescaped(
@@ -63,6 +65,7 @@ try {
 					'</td><td>' . $tokenEntry->getLocale() . '</td>' .
 					'<td>' . $tokenEntry->getResource() . '</td>' .
 					'<td>' . $tokenEntry->getClippedToken() . '</td>' .
+					'<td><img id="' . $tokenEntry->getId() . '" class="tokenTest" src="' . image_path('firebasepushnotifications', 'testPush.svg') . '" alt="test"/></td>' .
 					'<td><img id="' . $tokenEntry->getId() . '" class="tokenDelete" src="' .image_path('core', 'actions/delete.svg')  . '" alt="delete"/></td>'.
 				'</tr>'); //USe $('.className').stuff() tomorrow
 		}

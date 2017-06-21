@@ -24,7 +24,7 @@ namespace OCA\Firebasepushnotifications\DB;
 
 use OCA\Firebasepushnotifications\Entities\FirebaseMessage;
 use OCP\AppFramework\Db\Mapper;
-use OCP\IDb;
+use OCP\IDBConnection;
 use PDO;
 
 class FirebaseStorageHandler extends  Mapper {
@@ -35,7 +35,7 @@ class FirebaseStorageHandler extends  Mapper {
 	 */
 	protected $db;
 
-	public function __construct(IDb $db) {
+	public function __construct(IDBConnection $db) {
 		parent::__construct($db, 'firebase_saved_message', FirebaseMessage::class);
 		$this->db = $db;
 	}

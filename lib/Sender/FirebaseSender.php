@@ -32,7 +32,7 @@ use OCA\Firebasepushnotifications\Entities\FirebaseToken;
 use OCA\Firebasepushnotifications\Entities\FirebaseMessage;
 use OCA\Firebasepushnotifications\Entities\PushTypesConfiguration;
 use OCA\Firebasepushnotifications\Localisation\Localiser;
-use OCP\IDb;
+use OCP\IDBConnection;
 use OCP\ILogger;
 
 
@@ -198,7 +198,7 @@ class FirebaseSender extends TimedJob {
 	 * @param IDb $db
 	 * @param ILogger $logger
 	 */
-	public function __construct(FirebaseConfHandler $confHandler, FirebaseTokenHandler $tokenHandler, FirebaseStorageHandler $firebaseStorageHandler, IDb $db, ILogger $logger) {
+	public function __construct(FirebaseConfHandler $confHandler, FirebaseTokenHandler $tokenHandler, FirebaseStorageHandler $firebaseStorageHandler, IDBConnection $db, ILogger $logger) {
 		$this->setInterval(30);
 
 		$this->db = $db;
@@ -286,9 +286,11 @@ class FirebaseSender extends TimedJob {
 	 * @param $message string localised string message
 	 * @param $serverKey string server key to be used
 	 * @param string $token the destination token
+	 * @return string the Response (Either the HandleResponse result or the Exception, if any
 	 */
 	private function sendToFirebase($message, $serverKey, $token = ''){
 		$ch = null;
+		$response = 'FirebaseResponse:';
 		try{
 			$ch = curl_init("https://fcm.googleapis.com/fcm/send");
 			$header=array('Content-Type: application/json', 'charset=UTF-8', 'Authorization: key='.$serverKey);
@@ -301,16 +303,18 @@ class FirebaseSender extends TimedJob {
 			$ret = @curl_exec($ch);
 			if($ret){
 				$code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-				$this->getResponseParser()->handleResponse($code,$ret,$token);
+				$response = $this->getResponseParser()->handleResponse($code, $ret, $token);
 //				$this->log->info("Firebase CURL Result: ".$ret);
 			}
 
 		}catch (Exception $e){
 			$this->log->error('An error occurred while sending to Firebase: '.$e->getMessage());
 			$this->log->error($e->getTraceAsString());
+			$response = 'An error occurred while sending to Firebase: ' . $e->getMessage();
 		}finally{
 			curl_close($ch);
 		}
+		return $response;
 	}
 
 	/**
@@ -318,17 +322,24 @@ class FirebaseSender extends TimedJob {
 	 * @param FirebaseToken $token
 	 * @return string
 	 */
-	private function prepareMessage(FirebaseMessage $firebaseMessage, $token){
+	private function prepareMessage(FirebaseMessage $firebaseMessage, $token, $localize = true) {
 		$resJson = [];
 		$resJson['to'] = $token->getToken();
 		$resJson['time_to_live'] = 2300000;
 		$resJson['priority'] = 'high';
-		if($token->isIOSToken()){
-			$resJson['badge'] = "1";
-		}
+
 		$payload = [];
-		$payload['title'] = $this->getLocaliser()->localiseMessage($firebaseMessage->getTitle(), $firebaseMessage->getTargetUserIdAsArray(), $token->getLocale());
-		$payload['body'] = $this->getLocaliser()->localiseMessage($firebaseMessage->getMessage(),$firebaseMessage->getParams(),$token->getLocale());
+		if ($localize) {
+			$payload['title'] = $this->getLocaliser()->localiseMessage($firebaseMessage->getTitle(), $firebaseMessage->getTargetUserIdAsArray(), $token->getLocale());
+			$payload['body'] = $this->getLocaliser()->localiseMessage($firebaseMessage->getMessage(), $firebaseMessage->getParams(), $token->getLocale());
+		} else {
+			$payload['title'] = $firebaseMessage->getTitle();
+			$payload['body'] = $firebaseMessage->getMessage();
+		}
+
+		if ($token->isIOSToken()) {
+			$payload['badge'] = "1";
+		}
 		$resJson['notification'] = $payload;
 		$resJson['data'] = $firebaseMessage->getCustomDataAsArray();
 //		$this->log->info('Firebase Message JSON data field: |'.json_encode($resJson.'|');
@@ -358,6 +369,22 @@ class FirebaseSender extends TimedJob {
 		} else {
 			//QUIT
 		}
+	}
+
+	/**This function enables self testing of user notifications
+	 * @param string $title
+	 * @param string $messageText
+	 * @param FirebaseToken $token
+	 */
+	public function sendTestMessage($title, $messageText, $token) {
+		$message = new FirebaseMessage();
+		$message->setTitle($title);
+		$message->setMessage($messageText);
+		$message->setParams(["testKey" => "testValue"]);
+		$preparedMessage = $this->prepareMessage($message, $token, false);
+		$serverKey = $this->confHandler->getServerKey();
+		$this->log->info('Invio A Firebase: ' . $preparedMessage);
+		return $this->sendToFirebase($preparedMessage, $serverKey);
 	}
 
 	/**This function runs a basic test of the sender module

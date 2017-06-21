@@ -24,13 +24,13 @@ namespace OCA\Firebasepushnotifications\DB;
 
 use OCA\Firebasepushnotifications\Entities\FirebaseErrorLog;
 use OCP\AppFramework\Db\Mapper;
-use OCP\IDb;
+use OCP\IDBConnection;
 
 class FirebaseErrorLogHandler extends Mapper {
 
 	protected $db;
 	private $_log;
-	public function __construct(IDb $db) {
+	public function __construct(IDBConnection $db) {
 		parent::__construct($db, 'firebase_error_log', FirebaseErrorLog::class);
 		$this->db = $db;
 	}

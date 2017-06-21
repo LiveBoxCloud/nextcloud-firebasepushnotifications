@@ -56,11 +56,14 @@ class FirebaseResponseHandler {
 
 	/**This function parses the Firebase Server response looking for helpful
 	 * feedback on the sending and token registration info
-	 * @param $httpCode
+	 *
+*@param $httpCode
 	 * @param $response
 	 * @param $token
+	 * @return string A text response
 	 */
-	public function handleResponse($httpCode , $response, $token){
+	public function handleResponse($httpCode , $response, $token) {
+		$logResp = "";
 		switch ($httpCode){
 			case (200):{ //Successful Response
 				$resp = $this->parseResponse($response);
@@ -69,18 +72,25 @@ class FirebaseResponseHandler {
 					$deleteResult = $this->getTokenHandler()->deleteTokenByTokenString($token);
 					$logResp .= 'Token delete result' . $deleteResult->errorCode() . ' ';
 					$logResp .= 'Errors: ' . print_r($resp->getErrors(), true);
-					$this->log()->debug($logResp);
+				} else {
+					if ($resp->isSuccessful()) {
+						$logResp = 'Operation Successful';
+					} else {
+						$logResp = 'No Errors';
+					}
 				}
 				break;
 			}
 			case 401 : {
-				$this->log()->debug('Failed to authenticate sender account: ' . $httpCode);
+				$logResp = 'Failed to authenticate sender account: ' . $httpCode;
 				break;
 			}
-			default:{
-				$this->log()->debug('Unhandled Response Code: ' . $httpCode . ' Data: ' . $response);
+			default: {
+				$logResp = 'Unhandled Response Code: ' . $httpCode . ' Data: ' . $response;
 			}
 		}
+		$this->log()->debug($logResp);
+		return $logResp;
 	}
 
 	/**This function builds the FirebaseResponse object

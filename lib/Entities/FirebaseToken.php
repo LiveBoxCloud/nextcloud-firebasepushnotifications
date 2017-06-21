@@ -23,6 +23,7 @@
 namespace OCA\Firebasepushnotifications\Entities;
 
 
+use DateTime;
 use OCP\AppFramework\Db\Entity;
 
 
@@ -33,7 +34,7 @@ use OCP\AppFramework\Db\Entity;
  * @method string getLocale()
  * @method string getResource()
  * @method string getLastUsed()
- * @method string getDeviceType()
+ * @method integer getDeviceType()
  * @method void setUserId(string $userId)
  * @method void setToken(string $token)
  * @method void setLocale(string $locale)
@@ -60,14 +61,14 @@ class FirebaseToken extends Entity
 	 * @return bool
 	 */
 	public function isIOSToken(){
-		return $this->deviceType === self::IOS_DEVICE;
+		return intval($this->deviceType) === self::IOS_DEVICE;
 	}
 
 	/**Whether the Device for this token is Android based
 	 * @return bool
 	 */
 	public function isAndroidToken(){
-		return $this->deviceType === self::ANDROID_DEVICE;
+		return intval($this->deviceType) === self::ANDROID_DEVICE;
 	}
 
 	/**Returns the device type for this token as a string

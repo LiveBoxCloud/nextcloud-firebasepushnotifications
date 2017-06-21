@@ -37,6 +37,10 @@ table.settingsTable {
 	margin-top: 1em;
 }
 
+.tokenDelete, .tokenTest {
+	width: 1em;
+}
+
 table.settingsTable th.pushSettingHeader {
 	width: 5em;
 	text-align: center;

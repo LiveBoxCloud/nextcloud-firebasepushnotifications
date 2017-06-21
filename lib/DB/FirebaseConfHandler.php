@@ -37,12 +37,12 @@ use OCP\AppFramework\Db\Mapper;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCA\Firebasepushnotifications\Entities\FirebaseAppKey;
 use OCP\IConfig;
-use OCP\IDb;
+use OCP\IDBConnection;
 
 class FirebaseConfHandler extends Mapper{
 
 	/** Db reference
-	 * @var IDb
+	 * @var IDBConnection
 	 */
 	protected  $db;
 	private $_log;
@@ -61,7 +61,7 @@ class FirebaseConfHandler extends Mapper{
 	}
 
 
-	public function __construct(IConfig $config, IDb $db) {
+	public function __construct(IConfig $config, IDBConnection $db) {
 		parent::__construct($db, 'firebase_configuration', FirebaseAppKey::class);
 		$this->db = $db;
 		$this->config = $config;

@@ -7,12 +7,13 @@ $(document).ready(function () {
 	var adminOCMsgSpace = '#settings_activity';
 	var userOCMsgSpace = '#firebase_user_settings_activity';
 	var firebaseKeyMsgSpace = '#firebase_key_settings_activity';
-
+	var tokenTestMsgSpace = '#firebase_test_message_activity';
 	var tokenDeleteMsgSpace = "#opProgress";
 	var basePostUrl = '/apps/firebasepushnotifications/';
 	var adminFormId = '#firebasepushnotifications_settings';
 	var firebaseKeyFormId = '#firebase_key_form';
 	var tokenDeleteClass = '.tokenDelete';
+	var tokenTestClass = '.tokenTest';
 	var tokenDeleteAllId = '#deleteAllTokens';
 	var tokenFormId = '#tokensForm';
 	var lockToggleButton = '#lockToggle';
@@ -66,7 +67,25 @@ $(document).ready(function () {
 			OC.msg.startSaving(tokenDeleteMsgSpace);
 			$('#tokenId').val(tokenId);
 			var post = $(tokenFormId).serialize();
-			var dest = OC.generateUrl(basePostUrl+"deleteToken");
+			var dest = OC.generateUrl(basePostUrl + "deleteToken");
+			$.post(dest, post, function (response) {
+				OC.msg.finishedSuccess(tokenDeleteMsgSpace, response.data.message);
+				if (response.data.removeRow) {
+					$('#row' + response.data.removeRow).remove();
+				}
+
+			});
+		}
+	}
+
+	function testToken () {
+		var tokenId = event.target.id;
+		if (tokenId && confirm('Send Test Message to token?') == true) {
+
+			OC.msg.startSaving(tokenTestMsgSpace);
+			$('#tokenId').val(tokenId);
+			var post = $(tokenFormId).serialize();
+			var dest = OC.generateUrl(basePostUrl+"testToken");
 			$.post(dest,post,function(response){
 				OC.msg.finishedSuccess(tokenDeleteMsgSpace,response.data.message);
 				if(response.data.removeRow){
@@ -90,6 +109,9 @@ $(document).ready(function () {
 			});
 		}
 	}
+
+	var tokenTestImgs = $(tokenTestClass);
+	tokenTestImgs.click(testToken);
 
 	var tokenImgs = $(tokenDeleteClass);
 	tokenImgs.click(deleteToken);

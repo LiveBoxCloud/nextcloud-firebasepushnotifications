@@ -27,6 +27,7 @@ use OCA\Firebasepushnotifications\CurrentUser;
 use OCA\Firebasepushnotifications\DB\FirebaseConfHandler;
 use OCA\Firebasepushnotifications\DB\FirebaseTokenHandler;
 use OCA\Firebasepushnotifications\Entities\DummyPushType;
+use OCA\Firebasepushnotifications\Sender\FirebaseSender;
 use OCA\Firebasepushnotifications\UserSettings;
 use OCP\Activity\IManager;
 use OCP\AppFramework\ApiController;
@@ -65,7 +66,11 @@ class AppSettingsController extends ApiController {
 
 	/** @var  FirebaseTokenHandler */
 	protected $firebaseTokenHandler;
+
+	/** @var FirebaseSender */
+	protected $firebaseSender;
 	private $_log;
+
 
 	private function log() {
 		if (!$this->_log) {
@@ -88,6 +93,7 @@ class AppSettingsController extends ApiController {
 	 * @param CurrentUser $currentUser
 	 * @param FirebaseConfHandler $firebaseConfHandler
 	 * @param FirebaseTokenHandler $tokenHandler
+	 * @param FirebaseSender $firebaseSender
 	 */
 	public function __construct($appName,
 								IRequest $request,
@@ -97,7 +103,7 @@ class AppSettingsController extends ApiController {
 								IManager $manager,
 								UserSettings $userSettings,
 								IL10N $l10n,
-								CurrentUser $currentUser, FirebaseConfHandler $firebaseConfHandler, FirebaseTokenHandler $tokenHandler) {
+								CurrentUser $currentUser, FirebaseConfHandler $firebaseConfHandler, FirebaseTokenHandler $tokenHandler, FirebaseSender $firebaseSender) {
 		parent::__construct($appName, $request);
 		$this->config = $config;
 		$this->random = $random;
@@ -108,6 +114,7 @@ class AppSettingsController extends ApiController {
 		$this->user = (string)$currentUser->getUID();
 		$this->firebaseConfHandler = $firebaseConfHandler;
 		$this->firebaseTokenHandler = $tokenHandler;
+		$this->firebaseSender = $firebaseSender;
 	}
 
 	/**This function handles Admin Settings update, spartan for now, but it should work.
@@ -193,7 +200,7 @@ class AppSettingsController extends ApiController {
 	 * @NoAdminRequired
 	 */
 	public function deleteUserToken() {
-		$this->log()->info('Delete User tokens has been called'.$this->user.' PostP:'.print_r($this->request->getParams(),true));
+		$this->log()->info('Delete User token has been called' . $this->user . ' PostP:' . print_r($this->request->getParams(), true));
 		$tokenId = $this->request->getParam('tokenId');
 		$response = 'Failed to delete Token';
 		if($tokenId){
@@ -208,6 +215,39 @@ class AppSettingsController extends ApiController {
 		));
 
 	}
+
+	/**
+	 * @NoCSRFRequired
+	 * @NoAdminRequired
+	 */
+	public function testUserToken() {
+		$this->log()->info('Test User token has been called' . $this->user . ' PostP:' . print_r($this->request->getParams(), true));
+		$tokenId = $this->request->getParam('tokenId');
+		$response = 'Failed to test Token';
+		if (!$tokenId) {
+			return $this->getSimpleDataResponseWithMessage('No TokenId');
+		}
+
+		$token = $this->firebaseTokenHandler->getTokenByUserAndId($this->user, $tokenId);
+		if (!$token) {
+			return $this->getSimpleDataResponseWithMessage('Failed to fetch token');
+		}
+		$response = $this->firebaseSender->sendTestMessage('Test Title', 'Test Message for this token', $token);
+		return new DataResponse(array(
+			'data' => array(
+				'message' => (string)$response
+			),
+		));
+	}
+
+	private function getSimpleDataResponseWithMessage($message) {
+		return new DataResponse(array(
+			'data' => array(
+				'message' => (string)$message
+			),
+		));
+	}
+
 	/**
 	 * @NoCSRFRequired
 	 * @NoAdminRequired
@@ -303,7 +343,8 @@ class AppSettingsController extends ApiController {
 		$params = [];
 		$params['tokens'] = $tokens;
 		$params['userSettings'] = $userSettings;
-
+		$params['web_locale'] = $this->l10n->getLanguageCode();
+//		$this->log()->info("Detected Language Code".$this->l10n->getLanguageCode() .' Localised TimeStamp: '.$this->l10n->l("datetime",microtime(true)));
 		//	$this->log()->info('User Settings Called For User:' . $this->user . ' Passing these parameters to the template: ' . print_r($params, true));
 		return new TemplateResponse('firebasepushnotifications', 'settings/personal', $params, 'blank');
 		/*		return new TemplateResponse('activity', 'settings/personal', [

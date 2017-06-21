@@ -32,7 +32,7 @@ use OCP\AppFramework\App;
 use OCP\Util;
 
 class Application extends App {
-	public function getAppName() {
+	public static function getAppName() {
 		return 'firebasepushnotifications';
 	}
 	public function __construct () {

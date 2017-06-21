@@ -11,7 +11,7 @@
 	<licence>AGPLv3</licence>
 	<author>Nunzio Iaccarino, Paolo Manili, Filippo Martini</author>
 	<shipped>false</shipped>
-	<version>0.0.38</version>
+	<version>0.0.41</version>
 	<default_enable/>
 	<types>
 		<filesystem/>
@@ -24,7 +24,7 @@
 	<repository type="git">http://git.liveboxcloud.com/paolo.manili/firebase-push-notifications.git</repository>
 
 	<dependencies>
-		<nextcloud min-version="11" max-version="11" />
+		<nextcloud min-version="11" max-version="12"/>
 	</dependencies>
 
 	<settings>
@@ -33,8 +33,6 @@
 	</settings>
 
 	<background-jobs>
-
 		<job>OCA\Firebasepushnotifications\Sender\FirebaseSender</job>
-
 	</background-jobs>
 </info>

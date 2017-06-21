@@ -30,6 +30,7 @@ return [
 		['name' => 'AppSettings#updateUserSettings', 'url' => '/userSettings', 'verb' => 'POST'],
 		['name' => 'AppSettings#updateFirebaseKey', 'url' => '/firebaseSettings', 'verb' => 'POST'],
 		['name' => 'AppSettings#deleteUserToken', 'url' => '/deleteToken', 'verb' => 'POST'],
+		['name' => 'AppSettings#testUserToken', 'url' => '/testToken', 'verb' => 'POST'],
 		['name' => 'AppSettings#deleteAllUserTokens', 'url' => '/deleteAllTokens', 'verb' => 'POST'],
 		['name' => 'Token#registerToken', 'url' => '/registerToken', 'verb' => 'GET'],
 		['name' => 'Token#unregisterToken', 'url' => '/unregisterToken', 'verb' => 'GET']
